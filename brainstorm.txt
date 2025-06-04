@@ -14,6 +14,7 @@ Budget_Splits:
     >50% -> Essentials (Rent, food, water.. living cost)
 
 
+
 Modules:
 
 >Data Serialization:
@@ -39,7 +40,7 @@ PROCEDURE:
         >Get amount from icome_entry
         >Calculate Formulas: <- Function
 
-            -10%  = income_amount * .10
+            -10%  = income_amount * .10	
             -15%  = income_amount * .10
             -25%  = income_amount * .25
             -50%  = income_amount * .50
@@ -51,6 +52,6 @@ PROCEDURE:
 
         >Results:
             -new terminal
-            -displays results -> table, text, or label <-- Unknown    
+            -displays results -> table, text, or label <-- Unknown
   
 

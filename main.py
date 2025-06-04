@@ -1,7 +1,7 @@
 import tkinter as tk
+import ttkbootstrap as ttk
+import pandas as pd
 from tkinter import messagebox
-import ttkbootstrap as ttk # type: ignore
-
 #Constants
 window_geometry = "500x350"
 total_income = ['']
@@ -13,29 +13,64 @@ def clear_default_text(event):
 
 
 def get_income():
+    global total_income
+
+    try:
+        amount = float(income_entry.get())
+        total_income = amount
+
+
+    except ValueError:
+        messagebox.showerror("Value Error", "Input must be a number")
     
+def create_results():
+    #Make Borders -> color: white & thick
 
-    amount = income_entry.get()
+    income = total_income
 
-    total_income[0] = amount
+    results_data = {
+        "Growth": ['25%', income * .25],
+        "Stability": ['15%', income * .15],
+        "Needs": ['50%', income * .5],
+        "Wants": ['10%', income * .10]
+    }
+
+
+
+    results_table = pd.DataFrame(results_data,index=['Percentage', 'Amount'])
+    
+    styled_results = results_table.style.set_table_styles([{
+        'selector': 'th', 'props': [('border', '1px solid black')]
+        }])
+    
+    styled_results
+
+    return results_table
+    
 
 
 def outcome_branch():
-
+    
+    results = create_results()
+    
     branch = ttk.Toplevel("Outcome")
 
     branch.geometry("400x400")
 
-    total_income_label = ttk.Label(master=branch, text=f"Total Income: {total_income[0]}",
+    total_income_label = ttk.Label(master=branch, text=f"Total Income: ${total_income}",
                                    font = ("Times New Roman", 16))
     total_income_label.pack()
+
+    outcome_content = ttk.Label(master=branch, text= results,
+                                font=("Times New Roman", 15))
+    outcome_content.pack()
 
     ok_button = ttk.Button(master=branch, text="Ok", width=7, command=lambda: branch.destroy())
     ok_button.pack(anchor='se', padx=7, pady=10)
 
     branch.mainloop()
 
-root = ttk.Window(themename="cyborg")
+root = ttk.Window(themename="darkly")
 
 root.geometry(window_geometry)
 root.title("Budget Advisor")
@@ -70,7 +105,7 @@ pdf_button = ttk.Button(master=outcome_buttons_frame, text="Save as PDF",
 pdf_button.pack(side="left")
 
 results_button = ttk.Button(master=outcome_buttons_frame, text="Results",
-                            command=lambda: outcome_branch() if len(total_income[0]) > 0 else messagebox.showerror("Result Error", "Income must be submitted"))
+                            command=lambda: outcome_branch() if type(total_income) == float else messagebox.showerror("Result Error", "Income must be submitted"))
 
 results_button.pack(side="left", padx = 10)
 
