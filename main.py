@@ -1,8 +1,10 @@
 import tkinter as tk
-import ttkbootstrap as ttk
+from tkinter import messagebox
+import ttkbootstrap as ttk # type: ignore
 
 #Constants
 window_geometry = "500x350"
+total_income = ['']
 
 def clear_default_text(event):
 
@@ -11,10 +13,12 @@ def clear_default_text(event):
 
 
 def get_income():
+    
 
     amount = income_entry.get()
-    
-    print(amount)
+
+    total_income[0] = amount
+
 
 def outcome_branch():
 
@@ -22,8 +26,11 @@ def outcome_branch():
 
     branch.geometry("400x400")
 
+    total_income_label = ttk.Label(master=branch, text=f"Total Income: {total_income[0]}",
+                                   font = ("Times New Roman", 16))
+    total_income_label.pack()
 
-    ok_button = ttk.Button(master=branch, text="Ok", width=7,)
+    ok_button = ttk.Button(master=branch, text="Ok", width=7, command=lambda: branch.destroy())
     ok_button.pack(anchor='se', padx=7, pady=10)
 
     branch.mainloop()
@@ -63,7 +70,7 @@ pdf_button = ttk.Button(master=outcome_buttons_frame, text="Save as PDF",
 pdf_button.pack(side="left")
 
 results_button = ttk.Button(master=outcome_buttons_frame, text="Results",
-                            command=outcome_branch)
+                            command=lambda: outcome_branch() if len(total_income[0]) > 0 else messagebox.showerror("Result Error", "Income must be submitted"))
 
 results_button.pack(side="left", padx = 10)
 
