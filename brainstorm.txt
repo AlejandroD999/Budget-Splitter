@@ -1,0 +1,56 @@
+Enter Brainstorming here...
+
+
+Constants:
+
+window_geometry = "500x350"
+
+
+Budget_Splits:
+
+    >25% -> Growth 
+    >15% -> Stability
+    >10% -> Rewards...
+    >50% -> Essentials (Rent, food, water.. living cost)
+
+
+Modules:
+
+>Data Serialization:
+    -Save as pdf
+    -json / cvs <-- ???
+
+
+>GUI module:
+    -ttkbootstrap
+
+> Programming Language -> Python
+
+
+PROCEDURE:
+
+
+1. Start programm
+
+
+2. Entry bar for Income + "Submit" button. 
+    
+    Submit on click:
+        >Get amount from icome_entry
+        >Calculate Formulas: <- Function
+
+            -10%  = income_amount * .10
+            -15%  = income_amount * .10
+            -25%  = income_amount * .25
+            -50%  = income_amount * .50
+
+3.Buttons -> Save as PDF & Results
+        >Save as PDF:
+            -new terminal
+            -saves as pdf in desired location
+
+        >Results:
+            -new terminal
+            -displays results -> table, text, or label <-- Unknown    
+  
+
