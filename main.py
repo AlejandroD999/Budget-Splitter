@@ -63,7 +63,7 @@ def outcome_branch():
 
     outcome_content = ttk.Label(master=branch, text= results,
                                 font=("Times New Roman", 15))
-    outcome_content.pack()
+    outcome_content.pack(pady = 10)
 
     ok_button = ttk.Button(master=branch, text="Ok", width=7, command=lambda: branch.destroy())
     ok_button.pack(anchor='se', padx=7, pady=10)
