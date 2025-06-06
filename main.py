@@ -46,14 +46,19 @@ def create_results():
     styled_results
 
     return results_table
-    
+
+def TreeResults():
+
+    treeview = ttk.Treeview()
 
 
-def outcome_branch():
+
+
+def results_window():
     
     results = create_results()
     
-    branch = ttk.Toplevel("Outcome")
+    branch = ttk.Toplevel("Results")
 
     branch.geometry("400x400")
 
@@ -105,7 +110,7 @@ pdf_button = ttk.Button(master=outcome_buttons_frame, text="Save as PDF",
 pdf_button.pack(side="left")
 
 results_button = ttk.Button(master=outcome_buttons_frame, text="Results",
-                            command=lambda: outcome_branch() if type(total_income) == float else messagebox.showerror("Result Error", "Income must be submitted"))
+                            command=lambda: results_window() if type(total_income) == float else messagebox.showerror("Result Error", "Income must be submitted"))
 
 results_button.pack(side="left", padx = 10)
 
