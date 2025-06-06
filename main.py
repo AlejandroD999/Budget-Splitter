@@ -22,11 +22,12 @@ def get_income():
 
     except ValueError:
         messagebox.showerror("Value Error", "Input must be a number")
-    
-def create_results():
-    #Make Borders -> color: white & thick
 
+
+
+def TreeResults(master):
     income = total_income
+    cols = []
 
     results_data = {
         "Growth": ['25%', income * .25],
@@ -36,35 +37,40 @@ def create_results():
     }
 
 
-
-    results_table = pd.DataFrame(results_data,index=['Percentage', 'Amount'])
+    treeview = ttk.Treeview(master, columns=("Percentage", "Amount"))
     
-    styled_results = results_table.style.set_table_styles([{
-        'selector': 'th', 'props': [('border', '1px solid black')]
-        }])
-    
-    styled_results
+    treeview.column("#0", width=75, minwidth=25, stretch = False)
+    treeview.column('Percentage', width=100, minwidth=50, stretch=False)
+    treeview.column('Amount', width=100, minwidth=50, stretch=False)
 
-    return results_table
+    treeview.heading("Percentage", text="Percentage", anchor='w')
+    treeview.heading("Amount", text="Amount", anchor='w')
 
-def TreeResults():
+    for key, value in results_data.items():       
+        
+        treeview.insert("",
+                        "2",
+                        text= key,
+                        values=(value[0],f"${value[1]}")
+                        )
+        
 
-    treeview = ttk.Treeview()
 
 
-
+    treeview.pack(anchor = 'center', pady=10)        
 
 def results_window():
     
-    results = create_results()
     
     branch = ttk.Toplevel("Results")
-
     branch.geometry("400x400")
+
 
     total_income_label = ttk.Label(master=branch, text=f"Total Income: ${total_income}",
                                    font = ("Times New Roman", 16))
     total_income_label.pack()
+
+    results = TreeResults(branch)
 
     outcome_content = ttk.Label(master=branch, text= results,
                                 font=("Times New Roman", 15))
