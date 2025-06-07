@@ -1,6 +1,6 @@
 import tkinter as tk
 import ttkbootstrap as ttk
-import pandas as pd
+from ttkbootstrap import Style as TtkStyle
 from tkinter import messagebox
 #Constants
 window_geometry = "500x350"
@@ -27,7 +27,7 @@ def get_income():
 
 def TreeResults(master):
     income = total_income
-    cols = []
+    
 
     results_data = {
         "Growth": ['25%', income * .25],
@@ -39,19 +39,21 @@ def TreeResults(master):
 
     treeview = ttk.Treeview(master, columns=("Percentage", "Amount"))
     
+
     treeview.column("#0", width=75, minwidth=25, stretch = False)
     treeview.column('Percentage', width=100, minwidth=50, stretch=False)
     treeview.column('Amount', width=100, minwidth=50, stretch=False)
-
-    treeview.heading("Percentage", text="Percentage", anchor='w')
-    treeview.heading("Amount", text="Amount", anchor='w')
+    
+    treeview.heading("Percentage", text="Percentage")
+    treeview.heading("Amount", text="Amount")
+    
 
     for key, value in results_data.items():       
         
         treeview.insert("",
                         "2",
                         text= key,
-                        values=(value[0],f"${value[1]}")
+                        values=(value[0],f"${round(value[1], 2)}")
                         )
         
 
