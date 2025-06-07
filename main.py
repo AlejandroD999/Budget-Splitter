@@ -27,7 +27,7 @@ def get_income():
 
 def TreeResults(master):
     income = total_income
-    
+
 
     results_data = {
         "Growth": ['25%', income * .25],
@@ -37,15 +37,17 @@ def TreeResults(master):
     }
 
 
-    treeview = ttk.Treeview(master, columns=("Percentage", "Amount"))
+    treeview = ttk.Treeview(master, columns=("Percentage", "Amount"), style="Treeview")
     
 
-    treeview.column("#0", width=75, minwidth=25, stretch = False)
+
+    treeview.column("#0", width=80, minwidth=25, stretch = False)
     treeview.column('Percentage', width=100, minwidth=50, stretch=False)
     treeview.column('Amount', width=100, minwidth=50, stretch=False)
     
-    treeview.heading("Percentage", text="Percentage")
-    treeview.heading("Amount", text="Amount")
+    treeview.heading("#0", text="Category", anchor='w')
+    treeview.heading("Percentage", text="Percentage", anchor="w")
+    treeview.heading("Amount", text="Amount", anchor= 'w')
     
 
     for key, value in results_data.items():       
@@ -65,7 +67,7 @@ def results_window():
     
     
     branch = ttk.Toplevel("Results")
-    branch.geometry("400x400")
+    branch.geometry("400x400+550+-10")
 
 
     total_income_label = ttk.Label(master=branch, text=f"Total Income: ${total_income}",
