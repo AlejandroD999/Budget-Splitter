@@ -49,17 +49,15 @@ def create_file():
 
     file_path = os.path.join(current_directory, 'BudgetResults.txt')
     
-    try:
-        with open(file_path, 'w') as file:
-            file.write("-------------------Results-------------------")
-            for i in range(0, 4):
-                file.write('\n')
-
-            file.writelines(create_table())
-            file.close()
-    except FileExistsError:
-        messagebox.showerror('File Exists', "A file with this name exists already")
     
+    with open(file_path, 'w') as file:
+        file.write("-------------------Results-------------------")
+        for i in range(0, 4):
+            file.write('\n')
+
+        file.writelines(create_table())
+        file.close()
+
 def BudgetTable(master):
     global results_data
     
