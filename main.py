@@ -1,7 +1,6 @@
-import tkinter as tk
 import ttkbootstrap as ttk
-from ttkbootstrap import Style as TtkStyle
 from tkinter import messagebox
+
 #Constants
 window_geometry = "500x350"
 total_income = ['']
@@ -28,14 +27,15 @@ def get_income():
     except ValueError:
         messagebox.showerror("Value Error", "Input must be a number")
 
+def create_pdf():
+    pass
 
-
-def TreeResults(master):
+def BudgetTable(master):
     income = total_income
 
 
     results_data = {
-        "Growth": ['25%', income * .25],
+        "Invest": ['25%', income * .25],
         "Stability": ['15%', income * .15],
         "Needs": ['50%', income * .5],
         "Wants": ['10%', income * .10]
@@ -79,7 +79,7 @@ def results_window():
                                    font = ("Times New Roman", 16))
     total_income_label.pack()
 
-    results = TreeResults(branch)
+    results = BudgetTable(branch)
 
     outcome_content = ttk.Label(master=branch, text= results,
                                 font=("Times New Roman", 15))
@@ -97,12 +97,10 @@ def results_window():
 
     branch.mainloop()
 
-root = ttk.Window(themename="darkly")
 
+root = ttk.Window(themename="darkly")
 root.geometry(window_geometry)
 root.title("Budget Advisor")
-
-
 
 
 input_frame = ttk.Frame(master=root)
@@ -118,17 +116,15 @@ income_button = ttk.Button(master=input_frame, text="submit",
                            command=get_income)
 income_button.pack(side="left", padx = 5)
 
-outcome_frame = tk.Frame(master=root)
+outcome_frame = ttk.Frame(master=root)
 outcome_frame.pack()
-
-
 
 outcome_buttons_frame = ttk.Frame(master= root)
 outcome_buttons_frame.pack(anchor="se", padx=5)
 
 
 pdf_button = ttk.Button(master=outcome_buttons_frame, text="Save as PDF",
-                        style='outline')
+                        style='outline', command= create_pdf)
 pdf_button.pack(side="left")
 
 results_button = ttk.Button(master=outcome_buttons_frame, text="Results",
