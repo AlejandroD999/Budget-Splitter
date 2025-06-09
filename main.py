@@ -1,5 +1,7 @@
 import ttkbootstrap as ttk
 from tkinter import messagebox
+from tabulate import tabulate
+import os
 
 #Constants
 window_geometry = "500x350"
@@ -27,18 +29,47 @@ def get_income():
     except ValueError:
         messagebox.showerror("Value Error", "Input must be a number")
 
-def create_pdf():
-    pass
+def create_table():
 
+    data = {
+        "Invest": ['25%', f"${round(total_income * .25)}"],
+        "Stability": ['15%',f"${round(total_income * .15)}"],
+        "Needs": ['50%',f"${round(total_income * .5)}"],
+        "Wants": ['10%',f"${round(total_income * .10)}"]
+    }
+
+
+    table = tabulate(data, headers="keys" ,tablefmt = "grid")
+    
+    return table
+
+def create_file():
+    
+    current_directory = os.getcwd()
+
+    file_path = os.path.join(current_directory, 'BudgetResults.txt')
+    
+    try:
+        with open(file_path, 'w') as file:
+            file.write("-------------------Results-------------------")
+            for i in range(0, 4):
+                file.write('\n')
+
+            file.writelines(create_table())
+            file.close()
+    except FileExistsError:
+        messagebox.showerror('File Exists', "A file with this name exists already")
+    
 def BudgetTable(master):
-    income = total_income
+    global results_data
+    
 
 
     results_data = {
-        "Invest": ['25%', income * .25],
-        "Stability": ['15%', income * .15],
-        "Needs": ['50%', income * .5],
-        "Wants": ['10%', income * .10]
+        "Invest": ['25%', total_income * .25],
+        "Stability": ['15%', total_income * .15],
+        "Needs": ['50%', total_income * .5],
+        "Wants": ['10%', total_income * .10]
     }
 
 
@@ -123,9 +154,9 @@ outcome_buttons_frame = ttk.Frame(master= root)
 outcome_buttons_frame.pack(anchor="se", padx=5)
 
 
-pdf_button = ttk.Button(master=outcome_buttons_frame, text="Save as PDF",
-                        style='outline', command= create_pdf)
-pdf_button.pack(side="left")
+txt_button = ttk.Button(master=outcome_buttons_frame, text="Save as Txt",
+                        style='outline', command= create_file)
+txt_button.pack(side="left")
 
 results_button = ttk.Button(master=outcome_buttons_frame, text="Results",
                             command=lambda: results_window() if type(total_income) == float else messagebox.showerror("Result Error", "Income must be submitted"))
