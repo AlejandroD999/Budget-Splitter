@@ -11,6 +11,11 @@ def clear_default_text(event):
     if income_entry.get() == "Enter weekly income here":
         income_entry.delete(0, ttk.END)
 
+def refresh_results(master):
+
+    master.destroy()
+
+    results_window()
 
 def get_income():
     global total_income
@@ -67,7 +72,7 @@ def results_window():
     
     
     branch = ttk.Toplevel("Results")
-    branch.geometry("400x400+550+-10")
+    branch.geometry("400x350+550+-10")
 
 
     total_income_label = ttk.Label(master=branch, text=f"Total Income: ${total_income}",
@@ -78,10 +83,17 @@ def results_window():
 
     outcome_content = ttk.Label(master=branch, text= results,
                                 font=("Times New Roman", 15))
-    outcome_content.pack(pady = 10)
+    outcome_content.pack(pady = 0)
 
-    ok_button = ttk.Button(master=branch, text="Ok", width=7, command=lambda: branch.destroy())
-    ok_button.pack(anchor='se', padx=7, pady=10)
+    buttons_frame = ttk.Frame(branch)
+    buttons_frame.pack(anchor= 'se', padx=10, pady=5)
+
+    refresh_button = ttk.Button(master=buttons_frame, text='Refresh',
+                                 width = 10, command =lambda: refresh_results(branch))
+    refresh_button.pack(side = 'left')
+
+    ok_button = ttk.Button(master=buttons_frame, text="Ok", width=7, command=lambda: branch.destroy())
+    ok_button.pack(side = 'left', padx = 5)
 
     branch.mainloop()
 
