@@ -7,7 +7,7 @@ import os
 #Constants
 window_geometry = f"450x150+200+100"
 current_directory = os.getcwd()
-total_income = ['']
+
 
 def clear_default_text(event):
     event.widget.delete(0, ttk.END)
@@ -23,7 +23,7 @@ def submit_income():
     global total_income
 
     try:
-        amount = float(income_entry.get())
+        amount = round(float(income_entry.get()), 2)
         total_income = amount
 
         submitted_label = ttk.Label(master= income_frame, text="Submitted",
@@ -32,7 +32,7 @@ def submit_income():
 
 
     except ValueError:
-        messagebox.showerror("Value Error", "Input must be a number")
+        messagebox.showerror("Value Error", "Enter a valid currency. ")
 
 def submit_filename():
     global filename
@@ -43,10 +43,10 @@ def submit_filename():
 def create_table():
 
     data = {
-        "Invest": ['25%', f"${round(total_income * .25)}"],
-        "Stability": ['15%',f"${round(total_income * .15)}"],
-        "Needs": ['50%',f"${round(total_income * .5)}"],
-        "Wants": ['10%',f"${round(total_income * .10)}"]
+        "Invest": ['25%', f"${round(total_income * .25, 2)}"],
+        "Stability": ['15%',f"${round(total_income * .15, 2)}"],
+        "Needs": ['50%',f"${round(total_income * .5, 2)}"],
+        "Wants": ['10%',f"${round(total_income * .10, 2)}"]
     }
 
 
@@ -54,29 +54,48 @@ def create_table():
     
     return table
 
-def create_file():
+def save_file(branch):
 
-    file_path = os.path.join(current_directory, f"{filename}.txt")
+    try:
+        file_path = os.path.join(current_directory,"data", f"{filename}.txt")
     
-    if len(filename) > 1:
 
         with open(file_path, 'w') as file:
             file.write("-------------------Results-------------------")
             for i in range(0, 4):
                 file.write('\n')
+            
+            file.write(f"Total Income:{total_income}\n\n")
 
             file.writelines(create_table())
             file.close()
 
-    else:
-        messagebox.showinfo("File name", "File name mustr be entered")
+        
+        saved_frame = ttk.Frame(master = branch, borderwidth= 5, relief='solid')
+        saved_frame.pack(anchor = 'sw', padx = 15, pady= 10)
+
+        
+        saved_label = ttk.Label(master= saved_frame, text=f"Successfully saved at:",
+                                    font = ("Times New Roman", 14, 'italic'))
+        saved_label.pack(padx=0)
+
+        saved_text  =ttk.Entry(master= saved_frame)
+        saved_text.insert(0, file_path)        
+        saved_text.pack(padx = 15, pady= 5)
+
+
+
+
+    except NameError:
+        messagebox.showinfo("File name", "File name must be entered")
+
 
 def save_results():
     global FileName_entry
 
 
     save_branch = ttk.Toplevel("Save as txt")
-    save_branch.geometry("450x350+200+290")
+    save_branch.geometry("450x250+200+290")
     
 
     FileName_frame = ttk.Frame(master=save_branch)
@@ -91,18 +110,19 @@ def save_results():
                                  width= 6, command= submit_filename)
     FileName_button.pack(side = 'left', padx = 5)
 
+    FileLocation_frame = ttk.Frame(master= save_branch)
+    FileLocation_frame.pack(anchor='w')
 
     bottom_frame = ttk.Frame(master= save_branch)
-    bottom_frame.pack(anchor= 'se', padx = 5, pady = 5)
+    bottom_frame.pack(anchor= 'center', padx = 0, pady = 5)
 
     cancel_button = ttk.Button(master=bottom_frame, text= "Cancel", width=10, style='outline',
                                command = lambda: save_branch.destroy())
     cancel_button.pack(side='left')
 
-    confirm_button = ttk.Button(master = bottom_frame,text = 'Confirm',
-                                width = 7, command= create_file)
-    confirm_button.pack(side = 'left', padx = 6)
-
+    save_button = ttk.Button(master = bottom_frame,text = 'Save',
+                                width = 7, command=lambda: save_file(FileLocation_frame))
+    save_button.pack(side = 'left', padx = 6)
     
 
     save_branch.mainloop()
@@ -138,7 +158,7 @@ def BudgetTable(master):
         treeview.insert("",
                         "2",
                         text= key,
-                        values=(value[0],f"${round(value[1], 2)}")
+                        values=(value[0],f"${value[1]}")
                         )
         
 
@@ -178,7 +198,7 @@ def results_window():
 
 root = ttk.Window(themename="darkly")
 root.geometry(window_geometry)
-root.title("Budget Advisor")
+root.title("Budget Splitter")
 
 
 income_frame = ttk.Frame(master=root)
@@ -203,9 +223,9 @@ outcome_buttons_frame = ttk.Frame(master= root)
 outcome_buttons_frame.pack(anchor="se", padx=5)
 
 
-save_button = ttk.Button(master=outcome_buttons_frame, text="Save as Txt",
-                        style='outline', command= save_results)
-save_button.pack(side="left")
+SaveAs_button = ttk.Button(master=outcome_buttons_frame, text="Save as Txt",
+                        style='outline', command=lambda: save_results() if type(total_income) == float else messagebox.showerror("Result Error", "Income must be submitted"))
+SaveAs_button.pack(side="left")
 
 results_button = ttk.Button(master=outcome_buttons_frame, text="Results",
                             command=lambda: results_window() if type(total_income) == float else messagebox.showerror("Result Error", "Income must be submitted"))
