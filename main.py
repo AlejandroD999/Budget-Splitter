@@ -7,6 +7,7 @@ import os
 #Constants
 window_geometry = f"450x150+200+100"
 current_directory = os.getcwd()
+total_income = ''
 
 
 def clear_default_text(event):
@@ -22,6 +23,7 @@ def refresh_results(master):
 def submit_income():
     global total_income
 
+   
     try:
         amount = round(float(income_entry.get()), 2)
         total_income = amount
@@ -34,12 +36,8 @@ def submit_income():
     except ValueError:
         messagebox.showerror("Value Error", "Enter a valid currency. ")
 
-def submit_filename():
-    global filename
 
-    filename = FileName_entry.get()
 
-        
 def create_table():
 
     data = {
@@ -53,6 +51,15 @@ def create_table():
     table = tabulate(data, headers="keys" ,tablefmt = "grid")
     
     return table
+
+def submit_filename(master):
+    global filename
+
+    filename = FileName_entry.get()
+
+    filename_display = ttk.Label(master=master, text=f"File Name: {filename}.txt", 
+                                font=("Times New Roman", 12))
+    filename_display.pack(anchor = 'nw', padx= 2)
 
 def save_file(branch):
 
@@ -92,29 +99,32 @@ def save_file(branch):
 
 def save_results():
     global FileName_entry
+    
 
 
     save_branch = ttk.Toplevel("Save as txt")
-    save_branch.geometry("450x250+200+290")
+    save_branch.geometry("+200+290")
     
 
     FileName_frame = ttk.Frame(master=save_branch)
-    FileName_frame.pack(anchor= 'nw', pady=25, padx=15)
+    FileName_frame.pack(anchor= 'center', pady=6, padx=15)
 
     FileName_entry = ttk.Entry(master = FileName_frame)
     FileName_entry.insert(0, "Enter File Name")
     FileName_entry.bind("<FocusIn>", clear_default_text)
     FileName_entry.pack(side="left")
-
+    
     FileName_button = ttk.Button(master=FileName_frame, text="Submit",
-                                 width= 6, command= submit_filename)
+                                 width= 6, command=lambda: submit_filename(FileLocation_frame))
     FileName_button.pack(side = 'left', padx = 5)
 
     FileLocation_frame = ttk.Frame(master= save_branch)
-    FileLocation_frame.pack(anchor='w')
+    FileLocation_frame.pack(anchor='center', pady=6)
+
+    
 
     bottom_frame = ttk.Frame(master= save_branch)
-    bottom_frame.pack(anchor= 'center', padx = 0, pady = 5)
+    bottom_frame.pack(anchor= 'center', padx = 0, pady = 4)
 
     cancel_button = ttk.Button(master=bottom_frame, text= "Cancel", width=10, style='outline',
                                command = lambda: save_branch.destroy())
@@ -133,10 +143,10 @@ def BudgetTable(master):
 
 
     results_data = {
-        "Invest": ['25%', total_income * .25],
-        "Stability": ['15%', total_income * .15],
-        "Needs": ['50%', total_income * .5],
-        "Wants": ['10%', total_income * .10]
+        "Invest": ['25%', round(total_income * .25, 2)],
+        "Stability": ['15%', round(total_income * .15, 2)],
+        "Needs": ['50%', round(total_income * .5, 2)],
+        "Wants": ['10%', round(total_income * .10, 2)]
     }
 
 
